@@ -1,0 +1,60 @@
+// Define pins for piezo sensor and buzzer
+#define PIEZO_PIN A0    // Pin for the piezo sensor (analog)
+#define BUZZER_PIN 8    // Pin for the buzzer (digital)
+
+// Set the knock threshold value
+#define KNOCK_THRESHOLD 100  // Adjust this value based on testing
+
+// Define the melody notes (C4, D4, E4, etc.)
+int melody[] = {
+  262, 294, 330, 349, 392, 440, 494, 523, 587, 659, 698, 784, 880, 988, 1047
+};
+
+// Define the note durations (in milliseconds)
+int noteDurations[] = {
+  500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500
+};
+
+void setup() {
+  // Start the serial monitor for debugging (optional)
+  Serial.begin(9600);
+  
+  // Set up the buzzer pin
+  pinMode(BUZZER_PIN, OUTPUT);
+}
+
+void loop() {
+  // Read the value from the piezo sensor
+  int sensorValue = analogRead(PIEZO_PIN);
+
+  // Print the sensor value to the serial monitor for debugging (optional)
+  Serial.println(sensorValue);
+
+  // Check if the piezo sensor value exceeds the threshold (indicating a knock)
+  if (sensorValue > KNOCK_THRESHOLD) {
+    Serial.println("Knock detected!");
+
+    // Play the melody on the buzzer
+    playMelody();
+  }
+
+  // Small delay to avoid overloading the processor
+  delay(100);
+}
+
+void playMelody() {
+  // Loop through the melody and play each note
+  for (int i = 0; i < 15; i++) {
+    int noteDuration = noteDurations[i];
+    int note = melody[i];
+
+    // Play the note on the buzzer
+    tone(BUZZER_PIN, note, noteDuration);
+
+    // Wait for the note duration before playing the next note
+    delay(noteDuration * 1.30);  // Add a small pause between notes
+
+    // Stop the tone to avoid overlap
+    noTone(BUZZER_PIN);
+  }
+}

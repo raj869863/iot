@@ -1,0 +1,27 @@
+void setup() {
+  // Start serial communication
+  Serial.begin(9600);
+  
+  // Prompt the user to enter a number
+  Serial.println("Please enter a number to be squared:");
+}
+
+void loop() {
+  // Check if data is available to read from the serial monitor
+  if (Serial.available() > 0) {
+    // Read the incoming number from the serial monitor
+    float userInput = Serial.parseFloat();
+    
+    // Calculate the square of the number
+    float squared = userInput * userInput;
+    
+    // Print the result to the serial monitor
+    Serial.print("The square of ");
+    Serial.print(userInput);
+    Serial.print(" is ");
+    Serial.println(squared);
+    
+    // Wait for a short time before continuing
+    delay(2000);
+  }
+}

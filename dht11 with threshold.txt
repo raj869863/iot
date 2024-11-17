@@ -1,0 +1,59 @@
+#include <DHT.h>
+
+// Define the pin where the DHT11 sensor is connected
+#define DHTPIN 2            // Digital pin connected to the DHT11
+#define DHTTYPE DHT11       // DHT 11 sensor
+
+// Create an instance of the DHT class
+DHT dht(DHTPIN, DHTTYPE);
+
+// Define the threshold temperature in Fahrenheit
+float tempThresholdFahrenheit = 85.0;  // Example threshold value (85°F)
+
+// Define the pin for the buzzer
+#define BUZZERPIN 13        // Pin connected to the buzzer
+
+void setup() {
+  // Start the serial communication
+  Serial.begin(9600);
+
+  // Initialize the DHT11 sensor
+  dht.begin();
+
+  // Set up the buzzer pin as output
+  pinMode(BUZZERPIN, OUTPUT);
+}
+
+void loop() {
+  // Wait a few seconds between measurements
+  delay(2000);
+
+  // Read humidity and temperature from the DHT11 sensor
+  float humidity = dht.readHumidity();
+  float tempC = dht.readTemperature();   // Temperature in Celsius
+  float tempF = dht.readTemperature(true); // Temperature in Fahrenheit
+
+  // Check if the reading is valid
+  if (isnan(humidity) || isnan(tempC) || isnan(tempF)) {
+    Serial.println("Failed to read from DHT sensor!");
+    return;
+  }
+
+  // Print the values to the Serial Monitor
+  Serial.print("Humidity: ");
+  Serial.print(humidity);
+  Serial.print(" %\t");
+  Serial.print("Temperature: ");
+  Serial.print(tempC);
+  Serial.print(" C\t");
+  Serial.print(tempF);
+  Serial.println(" F");
+
+  // Check if the temperature exceeds the threshold
+  if (tempF > tempThresholdFahrenheit) {
+    digitalWrite(BUZZERPIN, HIGH); // Turn on the buzzer
+    Serial.println("Warning: Temperature exceeds threshold! Buzzer ON");
+  } else {
+    digitalWrite(BUZZERPIN, LOW); // Turn off the buzzer
+  }
+}

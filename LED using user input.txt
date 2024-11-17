@@ -1,0 +1,41 @@
+const int greenLED = 7;
+const int yellowLED = 10;
+const int redLED = 13;
+
+void setup() {
+  pinMode(greenLED, OUTPUT);
+  pinMode(yellowLED, OUTPUT);
+  pinMode(redLED, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+    Serial.println("Input r,g , and b to Turn LED on and b to blinking green led");
+    char input = Serial.read();
+    
+    
+    digitalWrite(greenLED, LOW);
+    digitalWrite(yellowLED, LOW);
+    digitalWrite(redLED, LOW);
+
+    if (input == 'b') {
+      for (int i = 0; i < 10; i++) {  // Blink the green LED 5 times
+        digitalWrite((greenLED), HIGH);
+        digitalWrite((redLED), HIGH);
+        digitalWrite((yellowLED), HIGH);
+        delay(500);
+        digitalWrite(greenLED, LOW);
+        digitalWrite(redLED, LOW);
+        digitalWrite(yellowLED, LOW);
+        delay(500);
+      }
+    } else if (input == 'g') {
+      digitalWrite(greenLED, HIGH);
+    } else if (input == 'y') {
+      digitalWrite(yellowLED, HIGH);
+    } else if (input == 'r') {
+      digitalWrite(redLED, HIGH);
+    }
+  }
+}

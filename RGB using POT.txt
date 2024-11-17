@@ -1,0 +1,47 @@
+// Define pins for RGB LED
+#define RED_PIN   9   // Red pin connected to pin 9
+#define GREEN_PIN 10  // Green pin connected to pin 10
+#define BLUE_PIN  11  // Blue pin connected to pin 11
+
+// Define analog pins for potentiometers
+#define RED_POT_PIN   A0  // Potentiometer for Red connected to pin A0
+#define GREEN_POT_PIN A1  // Potentiometer for Green connected to pin A1
+#define BLUE_POT_PIN  A2  // Potentiometer for Blue connected to pin A2
+
+void setup() {
+  // Set up RGB LED pins as OUTPUT
+  pinMode(RED_PIN, OUTPUT);
+  pinMode(GREEN_PIN, OUTPUT);
+  pinMode(BLUE_PIN, OUTPUT);
+  
+  // Initialize serial communication (optional for debugging)
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Read the potentiometer values (0 to 1023)
+  int redValue = analogRead(RED_POT_PIN);
+  int greenValue = analogRead(GREEN_POT_PIN);
+  int blueValue = analogRead(BLUE_POT_PIN);
+  
+  // Map the potentiometer values (0 to 1023) to PWM range (0 to 255)
+  redValue = map(redValue, 0, 1023, 0, 255);
+  greenValue = map(greenValue, 0, 1023, 0, 255);
+  blueValue = map(blueValue, 0, 1023, 0, 255);
+
+  // Set the PWM values for the RGB LED
+  analogWrite(RED_PIN, redValue);
+  analogWrite(GREEN_PIN, greenValue);
+  analogWrite(BLUE_PIN, blueValue);
+  
+  // Optional: Print the values to the Serial Monitor for debugging
+  Serial.print("Red: ");
+  Serial.print(redValue);
+  Serial.print("\tGreen: ");
+  Serial.print(greenValue);
+  Serial.print("\tBlue: ");
+  Serial.println(blueValue);
+  
+  // Delay for a short time to allow for smooth color transitions
+  delay(50);  // Adjust the delay for smoother/rougher transitions
+}
